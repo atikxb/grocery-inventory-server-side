@@ -19,19 +19,68 @@ async function run() {
     try {
         await client.connect();
         const database = client.db("inventory");
-        const usersCollection = database.collection("items");
-       
-        //Inserting item to items collection
-        app.post('/addItem', async (req, res) => {
-            const user = req.body;
-            const result = await usersCollection.insertOne(user);
-            res.json(result);
-        });
+        const itemsCollection = database.collection("items");
+        //find all items
+        app.get('/items', async (req, res) => {
 
-    }
+            const items = await itemsCollection.find({}).toArray();
+            res.json(items);
+        });
+        //find current user's items
+        app.get('/useritems', async (req, res) => {
+            const email = req.query;
+            const items = await itemsCollection.find(email).toArray();
+            res.json(items);
+    });
+    // get single item api
+    app.get('/inventory/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const item = await itemsCollection.findOne(query);
+        res.json(item);
+    })
+    // //find single item
+    // app.post('/user', async (req, res) => {
+    //     const query = req.body;
+    //     if (query.id || query.email) {
+    //         const user = await usersCollection.findOne(query);
+    //         res.json(user);
+    //         console.log(user);
+    //     }
+
+    // });
+    //Inserting item to items collection
+    app.post('/addItem', async (req, res) => {
+        const user = req.body;
+        const result = await itemsCollection.insertOne(user);
+        res.json(result);
+    });
+
+
+
+
+
+    // //get single service api
+    // app.get('/services/:id', async (req, res) => {
+    //     const id = req.params.id;
+    //     const query = {_id: ObjectId(id)};
+    //     const service = await servicesCollection.findOne(query);
+    //     console.log('getting service', service);
+    //     res.json(service);
+    // })
+    // //delete api
+    // app.delete('/services/:id', async (req, res) => {
+    //     const id = req.params.id;
+    //     const query = {_id: ObjectId(id)};
+    //     const result = await servicesCollection.deleteOne(query);
+    //     console.log('deleting service', result);
+    //     res.json(result);
+    // })
+
+}
     finally {
-        // await client.close();
-    }
+    // await client.close();
+}
 
 }
 run().catch(console.dir);
