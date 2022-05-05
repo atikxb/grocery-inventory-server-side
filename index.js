@@ -47,6 +47,7 @@ async function run() {
         app.get('/useritems', verifyJWT, async (req, res) => {//verify token for current user to access this route
             const decodedEmail = req.decoded.email;//check user token and decoded token match or not
             const email = req.query;
+            // console.log(email.email, decodedEmail);
             if (email.email === decodedEmail) {
                 const items = await itemsCollection.find(email).toArray();
                 res.json(items);
@@ -95,6 +96,7 @@ async function run() {
         app.post('/login', async (req, res) => {
             const user = req.body;
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' });
+            console.log(user);
             res.json({ accessToken });
         });
 
