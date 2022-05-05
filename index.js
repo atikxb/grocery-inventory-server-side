@@ -14,6 +14,27 @@ app.use(express.json());
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.74f46.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+//api function
+async function run() {
+    try {
+        await client.connect();
+        const database = client.db("inventory");
+        const usersCollection = database.collection("items");
+       
+        //Inserting item to items collection
+        app.post('/addItem', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.json(result);
+        });
+
+    }
+    finally {
+        // await client.close();
+    }
+
+}
+run().catch(console.dir);
 
 //default route
 app.get('/', (req, res) => {
