@@ -72,16 +72,15 @@ async function run() {
         //update quantity for single item
         app.put('/inventory/:id', async (req, res) => {
             const id = req.params.id;
-            const quantity = req.body;
-            console.log(quantity);
-            // const filter = { _id: ObjectId(id) };
-            // const options = { upsert: true };
-            // const updateDoc = {
-            //     $set: quantity
-            // };
-            // const result = await itemsCollection.updateOne(filter, updateDoc, options);
-            // console.log('updating user', quantity, result);
-            // res.json(result);
+            const newQuantity = req.body.newQuantity;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: { quantity: newQuantity }
+            };
+            const result = await itemsCollection.updateOne(filter, updateDoc, options);
+            console.log('updating quantity', newQuantity, result);
+            res.json(result);
         })
 
         //delete api
