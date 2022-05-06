@@ -21,4 +21,4 @@
 <li>Cors</li>
 <li>Dot env</li>
 </ul>
-<h3>Live link: </h3>
+<h3>Live link: https://grocery-inventory-website.web.app/</h3>
