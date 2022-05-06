@@ -1,5 +1,5 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');//require jwt
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const cors = require('cors');
